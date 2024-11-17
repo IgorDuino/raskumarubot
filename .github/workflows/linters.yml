@@ -1,0 +1,43 @@
+name: Run linter checks
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  run_linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+    container: python:3.10.7
+    services:
+      postgres:
+        image: postgres:16.1
+        env:
+          POSTGRES_PASSWORD: app
+          POSTGRES_USER: app
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Install dependencies
+        run: |
+          poetry install --no-interaction
+        continue-on-error: true
+
+      - name: Lint with ruff
+        run: |
+          poetry run ruff src
+
+      - name: Format with ruff
+        run: |
+          poetry run ruff format src --diff
