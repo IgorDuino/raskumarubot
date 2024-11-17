@@ -1,6 +1,6 @@
 import logging
 
-from core.wlui.context import WLUIContextVar
+from app.bot.middlewares.wlui.context import WLUIContextVar
 
 wnl = WLUIContextVar()
 

@@ -1,12 +1,14 @@
-from pydantic import BaseModel, SecretStr
+from pydantic import BaseModel
 
 
 class BaseConfigsModel(BaseModel):
     IS_DEBUG: bool = False
+    EXTERNAL_URL: str | None = None
 
 
 class TelegramConfigsModel(BaseModel):
     TELEGRAM_BOT_TOKEN: str
+    WEBHOOK_SECRET_TOKEN: str | None = None
 
 
 class RedisConfigsModel(BaseModel):
@@ -21,22 +23,10 @@ class DataBaseConfigsModel(BaseModel):
     DB_NAME: str
 
 
-class SubgramConfigsModel(BaseModel):
-    SUBGRAM_API_TOKEN: SecretStr
-    SUBGRAM_PRODUCT_ID: str
-
-
-class BuisnessConfigsModel(BaseModel):
-    DAILY_FREE_GENERATIONS: int
-    GENERATIONS_PER_USER_INVITE: int
-
-
-class EnvConfigsModel(
+class SettingsModel(
     BaseConfigsModel,
     TelegramConfigsModel,
     RedisConfigsModel,
     DataBaseConfigsModel,
-    SubgramConfigsModel,
-    BuisnessConfigsModel,
 ):
     pass

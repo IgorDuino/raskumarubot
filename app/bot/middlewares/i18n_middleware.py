@@ -1,6 +1,7 @@
 from aiogram import types
-from aiogram.utils.i18n import FSMI18nMiddleware, I18n
-from core.service import get_user_language
+from aiogram.utils.i18n import FSMI18nMiddleware
+
+from app.core.service import get_user_language
 
 
 class CustomFSMI18nMiddleware(FSMI18nMiddleware):
@@ -16,8 +17,3 @@ class CustomFSMI18nMiddleware(FSMI18nMiddleware):
             return self.i18n.default_locale
         user_language = await get_user_language(user_id)
         return user_language if user_language else self.i18n.default_locale
-
-
-i18n_middleware = CustomFSMI18nMiddleware(
-    I18n(path="locales", default_locale="en", domain="messages")
-)

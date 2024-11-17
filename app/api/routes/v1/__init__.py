@@ -1,10 +1,6 @@
-from api.routes.v1 import (
-    generation_endpoints,
-    refresh_url_endpoints,
-    settings_endpoints,
-)
-from app.api.routes.v1 import ping_endpoint
 from fastapi import APIRouter
+
+from app.api.routes.v1 import ping_endpoint
 
 router = APIRouter(prefix="/v1")
 

@@ -1,50 +1,27 @@
-[tool.ruff]
-line-length = 120
-
-# Enable Pyflakes `E` and `F` codes by default.
-select = [
-    # Pyflakes
-    "F",
-    # Pycodestyle
-    "E",
-    "W",
-    # isort
-    "I001",
-]
-ignore = []
-
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
-]
-per-file-ignores = {}
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-# Assume Python 3.11.
-target-version = "py311"
-
-[tool.ruff.mccabe]
-# Unlike Flake8, default to a complexity level of 10.
-max-complexity = 10
+[tool.poetry]
+name = "telegram-bot"
+version = "0.1.0"
+description = "Template for your telegram bot"
+authors = ["Mikhail Khromov <khromov05@gmail.com>"]
+license = "UNLICENSE"
+readme = "README.md"
+packages = [{include = "telegram_bot"}]
 
 [tool.poetry.dependencies]
+python = "^3.10"
+aioredis3 = "^2.0.1"
+pydantic = "^2.9.2"
+orjson = "^3.10.11"
+aiogram = "^3.14.0"
+fastapi = "^0.115.5"
+tortoise-orm = "^0.21.7"
+asyncpg = "^0.30.0"
+uvicorn = "^0.32.0"
+starlette = "^0.41.2"
+python-dotenv = "^1.0.1"
+babel = "^2.16.0"
+redis = {extras = ["hiredis"], version = "^5.2.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

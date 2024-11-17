@@ -1,6 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
-from core.utils.texts import _
+
+from app.core.utils.texts import _
 
 
 def get_contact() -> ReplyKeyboardMarkup:

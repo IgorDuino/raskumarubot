@@ -1,22 +1,28 @@
-from configs.settings import env_parameters
+import logging
+
 from tortoise import Tortoise
 
+from app.core.configs.config import settings
+
 db_url = "postgres://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+logger = logging.getLogger(__name__)
 
 
-async def init():
+async def init_db():
+    logger.info("Initializing database")
     await Tortoise.init(
         db_url=db_url.format(
-            DB_USERNAME=env_parameters.DB_USERNAME,
-            DB_PASSWORD=env_parameters.DB_PASSWORD,
-            DB_HOST=env_parameters.DB_HOST,
-            DB_PORT=env_parameters.DB_PORT,
-            DB_NAME=env_parameters.DB_NAME,
+            DB_USERNAME=settings.DB_USERNAME,
+            DB_PASSWORD=settings.DB_PASSWORD,
+            DB_HOST=settings.DB_HOST,
+            DB_PORT=settings.DB_PORT,
+            DB_NAME=settings.DB_NAME,
         ),
-        modules={"models": ["core.db.models"]},
+        modules={"models": ["app.core.db.models"]},
     )
     await Tortoise.generate_schemas()
 
 
-async def close():
+async def close_db():
+    logger.info("Closing database connection")
     await Tortoise.close_connections()

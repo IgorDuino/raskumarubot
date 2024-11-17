@@ -1,8 +1,37 @@
+"""
+Telegram Bot Middleware for Logging Context Management
+
+This module provides a middleware implementation for handling Telegram bot events
+and managing logging context variables. The WnLoggingUserIdMiddleware class
+captures and manages message IDs, bot IDs, chat types, and chat IDs across
+different types of Telegram events.
+
+The middleware supports various Telegram event types including:
+- Regular messages
+- Edited messages
+- Channel posts
+- Edited channel posts
+- Inline queries
+- Chosen inline results
+
+It uses a context variable system (WLUIContextVar) to maintain these identifiers
+throughout the request lifecycle.
+
+Example:
+    middleware = WnLoggingUserIdMiddleware(wlui_context)
+    dp.middleware.setup(middleware)
+
+Dependencies:
+    - aiogram
+    - WLUIContextVar for context management
+"""
+
 import logging
 from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware, types
-from core.wlui.context import WLUIContextVar
+
+from app.bot.middlewares.wlui.context import WLUIContextVar
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +59,12 @@ class WnLoggingUserIdMiddleware(BaseMiddleware):
         except Exception as e:
             logger.exception("WnLoggingUserIdMiddleware", exc_info=e)
             message_id, bot_id, chat_type, chat_id = None, None, None, None
-        with self.wlui.use_message_id(message_id), self.wlui.use_bot_id(
-            bot_id
-        ), self.wlui.use_chat_id(chat_id), self.wlui.use_chat_type(chat_type):
+        with (
+            self.wlui.use_message_id(message_id),
+            self.wlui.use_bot_id(bot_id),
+            self.wlui.use_chat_id(chat_id),
+            self.wlui.use_chat_type(chat_type),
+        ):
             return await handler(event, data)
 
     def get_event_info(self, event: types.Update, data: dict):
@@ -44,15 +76,11 @@ class WnLoggingUserIdMiddleware(BaseMiddleware):
             elif event.channel_post:
                 return self.on_pre_process_channel_post(event.channel_post, data)
             elif event.edited_channel_post:
-                return self.on_pre_process_edited_channel_post(
-                    event.edited_channel_post, data
-                )
+                return self.on_pre_process_edited_channel_post(event.edited_channel_post, data)
             elif event.inline_query:
                 return self.on_pre_process_inline_query(event.inline_query, data)
             elif event.chosen_inline_result:
-                return self.on_pre_process_chosen_inline_result(
-                    event.chosen_inline_result, data
-                )
+                return self.on_pre_process_chosen_inline_result(event.chosen_inline_result, data)
         return None, None, None, None
 
     def on_pre_process_message(self, message: types.Message, data: dict):
@@ -79,9 +107,7 @@ class WnLoggingUserIdMiddleware(BaseMiddleware):
             channel_post.chat.id,
         )
 
-    def on_pre_process_edited_channel_post(
-        self, edited_channel_post: types.Message, data: dict
-    ):
+    def on_pre_process_edited_channel_post(self, edited_channel_post: types.Message, data: dict):
         return (
             edited_channel_post.message_id,
             data.get("bot").id,
@@ -97,9 +123,7 @@ class WnLoggingUserIdMiddleware(BaseMiddleware):
             inline_query.chat.id,
         )
 
-    def on_pre_process_chosen_inline_result(
-        self, chosen_inline_result: types.ChosenInlineResult, data: dict
-    ):
+    def on_pre_process_chosen_inline_result(self, chosen_inline_result: types.ChosenInlineResult, data: dict):
         return (
             chosen_inline_result.message_id,
             data.get("bot").id,
