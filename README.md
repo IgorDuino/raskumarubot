@@ -1,58 +1,87 @@
-# Telegram Bot template
+# 🚀 Ultimate Telegram Bot Template
 
-Telegram Bot template
+A supercharged, production-ready template for building scalable Telegram bots with all the bells and whistles!
 
-## Deployment
+## ✨ Features
 
-The project uses GitHub Actions with Ansible for automated deployments. We have two deployment workflows:
+- 🤖 **Aiogram 3** - Built with [aiogram](https://docs.aiogram.dev/) for elegant bot handlers
+- ⚡ **FastAPI Integration** - Lightning-fast API endpoints with automatic OpenAPI docs
+- 🔥 **Webhook Support** - Production-ready webhook handling for reliable bot updates
+- 🗄️ **Database Ready** - Pre-configured database integration with Tortoise ORM
+- 📡 **Redis Support** - Built-in Redis for caching and real-time data handling
+- 🌍 **i18n Support** - Multi-language support using Babel
+- 🔐 **Environment Management** - Secure configuration using Pydantic settings
+- 📊 **Logging & Monitoring** - Comprehensive logging setup with rotating file handlers
+- 🐳 **Docker Support** - Containerized for easy deployment and scaling
+- 🧪 **Health Checks** - Built-in health check endpoints for monitoring
 
-### Production Deployment (Blue-Green)
+## 🛠️ Tech Stack
 
-The production deployment uses a blue-green deployment strategy to ensure zero downtime. When code is pushed to the `main` branch, it:
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern API framework
+- [aiogram](https://docs.aiogram.dev/) - Powerful Telegram Bot framework
+- [Tortoise ORM](https://tortoise.github.io/) - Easy async ORM for Python
+- [Redis](https://redis.io/) - In-memory data store
+- [Babel](https://babel.pocoo.org/) - Internationalization framework
+- [Docker](https://www.docker.com/) - Containerization
+- [Poetry](https://python-poetry.org/) - Dependency management
 
-1. Builds a Docker image
-2. Deploys using blue-green strategy (alternating between two containers)
-3. Performs health checks before switching traffic
-4. Uses Nginx as a reverse proxy
+## 🚀 Quick Start
 
-Required GitHub Secrets:
-- `DEPLOY_SSH_KEY`: SSH private key for production server
-- `DEPLOY_HOST`: Production server hostname/IP
-- `DEPLOY_USER`: SSH user for deployment
+1. Clone the repository:
 
-### Development Deployment (Fast Deploy)
-
-For the development environment, we use a simpler, faster deployment process. When code is pushed to the `develop` branch, it:
-
-1. Stops any existing development container
-2. Builds and deploys a new container in one step
-3. Performs quick health checks
-
-Required GitHub Secrets:
-- `DEV_DEPLOY_SSH_KEY`: SSH private key for development server
-- `DEV_DEPLOY_HOST`: Development server hostname/IP
-- `DEV_DEPLOY_USER`: SSH user for development deployment
-
-### Port Configuration
-
-- Production:
-  - Nginx: Port 80
-  - Blue Container: Port 48001
-  - Green Container: Port 48002
-
-- Development:
-  - Direct container access: Port 48000
-
-### Health Checks
-
-Both environments use the `/health` endpoint to verify successful deployment. The endpoint returns:
-
+```bash
+git clone https://github.com/verybigsad/telegram-bot-template.git
 ```
 
-"""
-Project documentation covering:
-- Deployment workflows for both production and development
-- Configuration requirements and environment setup
-- Port mappings and infrastructure details
-- Health check implementation and monitoring
-"""
+2. Install dependencies:
+
+```bash
+poetry install
+```
+
+3. Set up your environment variables:
+
+```bash
+cp app/.env.example app/.env
+```
+
+4. Run the bot in polling mode:
+
+```bash
+python start-polling.py
+```
+
+## 🔧 Configuration
+
+soon to be here :eyes:
+
+## 📝 Project Structure
+
+```
+app/
+├── api/            # FastAPI routes and schemas
+├── core/           # Core functionality
+│   ├── db/         # Database models and config
+│   ├── redis/      # Redis integration
+├── locales/        # Locales for i18n
+└── bot/            # Telegram bot handlers and logic
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## ⭐ Show Your Support
+
+Give a ⭐️ if this project helped you!
+
+---
+
+Built with ❤️ and ☕ by verybigsad.
+- [github](https://github.com/verybigsad)
+- [telegram](https://t.me/verybigsad)
+- [linkedin](https://www.linkedin.com/in/m-khromov/)
