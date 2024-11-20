@@ -22,22 +22,20 @@ RUN curl -sSL https://install.python-poetry.org | python3 - && \
 
 RUN adduser --disabled-password --gecos "" tgbot_app
 
-COPY --chown=tgbot_app:tgbot_app pyproject.toml poetry.lock* ./
+COPY docker-entrypoint.sh /src
 
+COPY pyproject.toml poetry.lock* ./
 RUN poetry install --no-root --no-interaction --no-ansi
 
-COPY --chown=tgbot_app:tgbot_app ./app /src/app
-COPY --chown=tgbot_app:tgbot_app docker-entrypoint.sh /src
-COPY --chown=tgbot_app:tgbot_app run_polling.py /src
-RUN chmod +x /src/docker-entrypoint.sh
+COPY ./app /src/app
 
 RUN pybabel compile -d /src/app/locales -D messages
 
 RUN chown -R tgbot_app:tgbot_app /src
-
 USER tgbot_app
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
+
 
 ENTRYPOINT ["/src/docker-entrypoint.sh"]
