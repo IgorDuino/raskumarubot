@@ -2,10 +2,10 @@ import logging
 
 from aiogram import Router, types
 
-from app.core.utils.texts import _
+from app.bot.utils.texts import _
 
 logger = logging.getLogger(__name__)
-router = Router(name="Erorr handling router")
+router = Router(name="Error handling router")
 
 
 @router.errors()

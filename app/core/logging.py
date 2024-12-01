@@ -1,7 +1,7 @@
 import logging
-from logging.handlers import TimedRotatingFileHandler
 import os
 import sys
+from logging.handlers import TimedRotatingFileHandler
 
 from app.bot.middlewares.wlui.formatter import formatter as wlui_formatter
 from app.bot.middlewares.wlui.l_filter import WLUIFilter

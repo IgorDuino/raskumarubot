@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.core.utils.texts import _
+from app.bot.utils.texts import _
 
 
 def choose_language() -> InlineKeyboardMarkup:

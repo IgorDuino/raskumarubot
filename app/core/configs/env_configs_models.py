@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 
 
 class BaseConfigsModel(BaseModel):
@@ -7,8 +7,8 @@ class BaseConfigsModel(BaseModel):
 
 
 class TelegramConfigsModel(BaseModel):
-    TELEGRAM_BOT_TOKEN: str
-    WEBHOOK_SECRET_TOKEN: str | None = None
+    TELEGRAM_BOT_TOKEN: SecretStr
+    WEBHOOK_SECRET_TOKEN: SecretStr | None = None
 
 
 class RedisConfigsModel(BaseModel):

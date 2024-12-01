@@ -9,7 +9,7 @@ from aiogram import F, Router, types
 from aiogram.filters import Command
 from aiogram.types.reaction_type_emoji import ReactionTypeEmoji
 
-from app.core.utils.texts import _
+from app.bot.utils.texts import _
 
 logger = logging.getLogger(__name__)
 router = Router(name="Help router")

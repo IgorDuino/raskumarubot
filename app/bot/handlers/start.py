@@ -5,9 +5,9 @@ from aiogram.filters import Command, CommandObject
 from aiogram.types.reaction_type_emoji import ReactionTypeEmoji
 
 from app.bot.keyboards.inline import choose_language
+from app.bot.utils.texts import _
 from app.core.db.models import User
 from app.core.redis import RedisClient
-from app.core.utils.texts import _
 
 logger = logging.getLogger(__name__)
 router = Router(name="Start router")

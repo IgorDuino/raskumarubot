@@ -6,6 +6,7 @@ Provides health check endpoint for monitoring application status.
 
 import logging
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
@@ -22,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_application: FastAPI) -> AsyncGenerator[None, None]:
     setup_logging(level="DEBUG" if settings.IS_DEBUG else "INFO")
     await init_db()
     polling_task = await setup_bot(dp)

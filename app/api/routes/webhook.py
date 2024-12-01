@@ -12,7 +12,7 @@ router = APIRouter(tags=["webhook"])
 
 
 @router.post(
-    f"/webhook/telegram/{settings.TELEGRAM_BOT_TOKEN}",
+    f"/webhook/telegram/{settings.TELEGRAM_BOT_TOKEN.get_secret_value()}",
     status_code=status.HTTP_200_OK,
     include_in_schema=False,
 )

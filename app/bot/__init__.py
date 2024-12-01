@@ -17,11 +17,11 @@ from app.bot.middlewares import setup_middleware
 from app.core.configs.config import settings
 
 logger = logging.getLogger(__name__)
-bot = Bot(settings.TELEGRAM_BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(settings.TELEGRAM_BOT_TOKEN.get_secret_value(), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
 
-async def setup_bot(dp: Dispatcher):
+async def setup_bot(dp: Dispatcher) -> asyncio.Task | None:
     setup_middleware(dp)
     dp.include_routers(core_bot_router)
     polling_task = None
@@ -36,12 +36,12 @@ async def setup_bot(dp: Dispatcher):
         webhook_url = f"{settings.EXTERNAL_URL}/webhook/telegram/{settings.TELEGRAM_BOT_TOKEN}"
         await bot.set_webhook(
             url=webhook_url,
-            secret_token=settings.WEBHOOK_SECRET_TOKEN,
+            secret_token=settings.WEBHOOK_SECRET_TOKEN.get_secret_value() if settings.WEBHOOK_SECRET_TOKEN else None,
         )
     return polling_task
 
 
-async def stop_bot(polling_task: asyncio.Task):
+async def stop_bot(polling_task: asyncio.Task | None):
     if polling_task:
         logger.info("Stopping bot polling")
         polling_task.cancel()
