@@ -4,18 +4,17 @@ from aiogram import F, Router, types
 from aiogram.filters import Command, CommandObject
 from aiogram.types.reaction_type_emoji import ReactionTypeEmoji
 
-from app.bot.keyboards.inline import choose_language
 from app.bot.utils.texts import _
 from app.core.db.models import User
-from app.core.redis import RedisClient
+from app.core.redis import get_redis_client
 
 logger = logging.getLogger(__name__)
 router = Router(name="Start router")
 
 
 @router.message(Command(commands=["start"]), F.chat.type == "private")
-async def start_handler(message: types.Message, command: CommandObject, redis: RedisClient):
-    await message.answer(text=_("START_COMMAND_TEXT")(), reply_markup=choose_language())
+async def start_handler(message: types.Message, command: CommandObject):
+    await message.answer(text=_("START_COMMAND_TEXT")())
     await message.react([ReactionTypeEmoji(emoji="❤")])
 
     user, is_created = await User.update_or_create(
@@ -32,4 +31,5 @@ async def start_handler(message: types.Message, command: CommandObject, redis: R
         },
     )
 
+    redis = get_redis_client()
     await redis.set_user_block_status(message.from_user.id, False)
