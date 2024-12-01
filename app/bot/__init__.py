@@ -28,7 +28,7 @@ async def setup_bot(dp: Dispatcher) -> asyncio.Task | None:
     if os.environ.get("TGBOT_IS_POLLING") == "1":
         # Start bot polling in a separate task
         logger.info("Starting bot polling")
-        polling_task = asyncio.create_task(dp.start_polling())
+        polling_task = asyncio.create_task(dp.start_polling(bot))
     else:
         logger.info("Setting up webhook")
         if not settings.EXTERNAL_URL:
