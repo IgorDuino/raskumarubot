@@ -2,7 +2,7 @@ import logging
 from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import Message, TelegramObject, Update
 
 from app.core.db.models import User
 from app.core.redis import RedisClient, get_redis_client
@@ -18,13 +18,24 @@ class UserBlockCheckMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-        event: Message | CallbackQuery,
+        update: Update,
         data: Dict[str, Any],
     ) -> Any:
-        user_id = event.from_user.id
+        # Get user_id based on update type
+        user_id = None
+        event: TelegramObject = update.event
+        # try to get .from_user.id
+        try:
+            user_id = event.from_user.id
+        except AttributeError:
+            logger.debug(f"Update {update.event_type} does not contain user id, giving up.")
+            return await handler(update, data)
+
+        if not user_id:
+            return await handler(update, data)
 
         # Get blocked status from Redis bitmap
-        is_blocked = await self._redis.get_user_block_status(user_id)
+        is_blocked = await self._redis.is_user_blocked(user_id)
 
         if not is_blocked:
             # If not in bitmap or not blocked, check DB
@@ -39,4 +50,4 @@ class UserBlockCheckMiddleware(BaseMiddleware):
             return
 
         # Continue processing if user is not blocked
-        return await handler(event, data)
+        return await handler(update, data)

@@ -1,26 +1,30 @@
 import logging
 
-from aiogram import Router, types
+from aiogram import Bot, Router, types
+from aiogram.client.default import DefaultBotProperties
 
 from app.bot.utils.texts import _
+from app.core.configs.config import settings
 
 logger = logging.getLogger(__name__)
 router = Router(name="Error handling router")
+bot = Bot(token=settings.TELEGRAM_BOT_TOKEN.get_secret_value(), default=DefaultBotProperties(parse_mode="HTML"))
 
 
 @router.errors()
 async def error_handler(error_event: types.ErrorEvent):
     logger.critical(msg="Error event", exc_info=error_event.exception)
-
-    if error_event.update.message is not None:
-        chat_id = error_event.update.message.chat.id
-    elif error_event.update.callback_query is not None:
-        chat_id = error_event.update.callback_query.message.chat.id
-    else:
-        logger.error("No chat_id found in error event. Not telling anyone about the error")
+    try:
+        user_id = error_event.update.event.from_user.id
+    except AttributeError:
+        logger.debug(
+            f"Update {error_event.update.event_type} does not contain user id, not telling anyone about the error."
+        )
         return
-
-    await error_event.bot.send_message(
-        chat_id=chat_id,
-        text=_("SOMETHING_WENT_WRONG")(),
-    )
+    try:
+        await bot.send_message(
+            chat_id=user_id,
+            text=_("SOMETHING_WENT_WRONG")(),
+        )
+    except Exception as e:
+        logger.error(f"Error sending error message to user {user_id}: {e}")
