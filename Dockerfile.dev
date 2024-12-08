@@ -13,10 +13,8 @@ WORKDIR /src
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
-    gettext \
     gcc \
     python3-dev \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install poetry
@@ -47,12 +45,14 @@ RUN adduser --disabled-password --gecos "" tgbot_app
 
 # Copy dependencies from builder
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
+COPY --from=builder /usr/local/bin/pybabel* /usr/local/bin/
 
 # Copy application
 COPY ./scripts /src/scripts
 RUN chmod +x /src/scripts/*
 
 COPY ./app /src/app
+COPY ./run_polling.py /src/run_polling.py
 
 RUN pybabel compile -d /src/app/locales -D messages
 
@@ -66,4 +66,4 @@ USER tgbot_app
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-ENTRYPOINT ["sh", "/src/scripts/docker-entrypoint.prod.sh"]
+ENTRYPOINT ["sh", "/src/scripts/docker-entrypoint.dev.sh"]

@@ -1,8 +1,13 @@
 version: '3.8'
 
+# this is a development docker compose file.
+# please, don't use it for production. It has exposed ports and default passwords.
+
 services:
   telegram_bot:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     container_name: telegram_bot
     restart: "always"
     ports:
@@ -11,7 +16,7 @@ services:
       - telegram_bot_db
       - telegram_bot_redis
     env_file:
-      - app/.env
+      - .env 
     volumes:
       - ./logs:/src/logs
 
