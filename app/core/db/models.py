@@ -33,3 +33,25 @@ class User(Model):
 
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
+
+
+class Tag(Model):
+    class Meta:
+        table = "tags"
+        ordering = ["name"]
+
+    id = fields.IntField(pk=True, unique=True, index=True)
+    name = fields.CharField(max_length=64, unique=True)
+
+
+class GIF(Model):
+    class Meta:
+        table = "gifs"
+        ordering = ["created_at"]
+
+    id = fields.IntField(pk=True, unique=True, index=True)
+    file_path = fields.CharField(max_length=255)
+    tags = fields.ManyToManyField("models.Tag", related_name="gifs")
+
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)

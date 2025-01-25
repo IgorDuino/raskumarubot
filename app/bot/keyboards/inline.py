@@ -17,3 +17,11 @@ def start_webapp(button_text: str, url: str) -> InlineKeyboardMarkup:
     kb.button(text=button_text, web_app=WebAppInfo(url=url))
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
+
+
+def create_gif_search_results_keyboard(gifs) -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    for gif in gifs:
+        kb.button(text=gif.file_path, callback_data=f"gif_{gif.id}")
+    kb.adjust(1)
+    return kb.as_markup(resize_keyboard=True)
