@@ -1,19 +1,15 @@
-# 🚀 Ultimate Telegram Bot Template
+# 🤖 Raskumarubot
 
-A supercharged, production-ready template for building scalable Telegram bots with all the bells and whistles!
+Raskumarubot is a Telegram bot designed to provide various functionalities, including GIF search, user management, and more. This bot is built using aiogram and FastAPI, and it leverages Redis for caching and Tortoise ORM for database interactions.
 
 ## ✨ Features
 
-- 🤖 **Aiogram 3** - Built with [aiogram](https://docs.aiogram.dev/) for elegant bot handlers
-- ⚡ **FastAPI Integration** - Lightning-fast API endpoints with automatic OpenAPI docs
-- 🔥 **Webhook Support** - Production-ready webhook handling for reliable bot updates
-- 🗄️ **Database Ready** - Pre-configured database integration with Tortoise ORM
-- 📡 **Redis Support** - Built-in Redis for caching and real-time data handling
-- 🌍 **i18n Support** - Multi-language support using Babel
-- 🔐 **Environment Management** - Secure configuration using Pydantic settings
-- 📊 **Logging & Monitoring** - Comprehensive logging setup with rotating file handlers
-- 🐳 **Docker Support** - Containerized for easy deployment and scaling
-- 🧪 **Health Checks** - Built-in health check endpoints for monitoring
+- **GIF Search**: Search for GIFs based on tags.
+- **User Management**: Manage user data and preferences.
+- **Health Checks**: Monitor the health of the bot and its dependencies.
+- **i18n Support**: Multi-language support using Babel.
+- **Webhook Support**: Production-ready webhook handling for reliable bot updates.
+- **Polling Mode**: Run the bot in polling mode for development and testing.
 
 ## 🛠️ Tech Stack
 
@@ -30,7 +26,7 @@ A supercharged, production-ready template for building scalable Telegram bots wi
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/verybigsad/telegram-bot-template.git
+git clone https://github.com/IgorDuino/raskumarubot.git
 ```
 
 2. Install dependencies:
@@ -42,18 +38,27 @@ poetry install
 3. Set up your environment variables:
 
 ```bash
-cp app/.env.example app/.env
+cp .env.example .env
 ```
 
 4. Run the bot in polling mode:
 
 ```bash
-python start-polling.py
+python run_polling.py
 ```
 
 ## 🔧 Configuration
 
-soon to be here :eyes:
+To configure the bot, update the `.env` file with the necessary environment variables:
+
+- `IS_DEBUG`: Set to `True` for debug mode, `False` for production.
+- `TELEGRAM_BOT_TOKEN`: Your Telegram bot token.
+- `REDIS_URL`: URL for your Redis instance.
+- `DB_USERNAME`: Database username.
+- `DB_PASSWORD`: Database password.
+- `DB_HOST`: Database host.
+- `DB_PORT`: Database port.
+- `DB_NAME`: Database name.
 
 ## 📝 Project Structure
 
@@ -78,10 +83,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## ⭐ Show Your Support
 
 Give a ⭐️ if this project helped you!
-
----
-
-Built with ❤️ and ☕ by verybigsad.
-- [github](https://github.com/verybigsad)
-- [telegram](https://t.me/verybigsad)
-- [linkedin](https://www.linkedin.com/in/m-khromov/)
