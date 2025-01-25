@@ -60,7 +60,7 @@ async def process_frame_with_openai(frame: Image) -> List[str]:
         response = openai.Image.create(
             file=image_file,
             model="gpt-4-vision",
-            prompt="Extract text and key moments from this image, excluding tags like 'кот' or 'комару'.",
+            prompt="Extract text, key moments, and humor-related tags from this image. Focus on identifying elements that contribute to humor, such as facial expressions, actions, and context. Exclude tags like 'кот' or 'комару'.",
             size="500x500"
         )
 
