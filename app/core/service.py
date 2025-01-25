@@ -8,13 +8,19 @@ Provides functions for managing user data and preferences:
 """
 
 import logging
+import os
+from typing import List
+from PIL import Image, ImageSequence
+import openai
 
 from tortoise.exceptions import DoesNotExist
 
-from app.core.db.models import User
+from app.core.db.models import User, GIF
 from app.core.redis import RedisClient, get_redis_client
 
 logger = logging.getLogger(__name__)
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 async def get_user_language(user_id: int) -> str | None:
@@ -35,3 +41,35 @@ async def get_user_language(user_id: int) -> str | None:
 
 async def await_something(something):
     return await something
+
+
+def extract_middle_frame(gif_path: str) -> Image:
+    """Extract the middle frame from a GIF."""
+    with Image.open(gif_path) as img:
+        frames = [frame.copy() for frame in ImageSequence.Iterator(img)]
+        middle_frame = frames[len(frames) // 2]
+        return middle_frame
+
+
+async def process_frame_with_openai(frame: Image) -> List[str]:
+    """Process the extracted frame using OpenAI Batch API GPT-4 vision."""
+    frame_path = "/tmp/middle_frame.png"
+    frame.save(frame_path)
+
+    with open(frame_path, "rb") as image_file:
+        response = openai.Image.create(
+            file=image_file,
+            model="gpt-4-vision",
+            prompt="Extract text and key moments from this image, excluding tags like 'кот' or 'комару'.",
+            size="500x500"
+        )
+
+    tags = response["data"]["tags"]
+    return tags
+
+
+async def save_gif_tags(gif_path: str, tags: List[str]):
+    """Save the extracted tags to the database."""
+    gif, created = await GIF.get_or_create(file_path=gif_path)
+    gif.tags = tags
+    await gif.save()
